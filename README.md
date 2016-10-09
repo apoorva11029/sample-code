@@ -1,3 +1,12 @@
+HACKUMass Submission
+ZTeam: Samuel Ramkrishnan. Yash Vija, Apoorva Mittal
+
+Programmed Jibo to teach+evaluate Math problems using the SDK, Wolfram-Alpha and a LOT of assistance from Justin! #JustinForPrez
+
+For demo: Polite Jibo will wait for you to start talking, always. 
+
+
+
 # Jibo SDK Sample Code
 
 These sample skills will walk you through different features of the Jibo SDK Behavior Editor. Each sample builds on the previous one, so make sure to do them in order. Refer to the [Jibo SDK Documentation](https://developers.jibo.com/sdk/docs) for further tools usage and API reference.
