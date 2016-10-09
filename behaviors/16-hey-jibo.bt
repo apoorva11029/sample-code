@@ -80,6 +80,10 @@
         "asset-pack": "core",
         "children": [
             "964f3be4-6506-4d6b-a8fc-b2b912783e39",
+            "8b51e7f4-97ff-4e70-a304-97f5b65b35af",
+            "1a30027a-49cf-4481-8281-1be5a0e18191",
+            "583cd8ff-05e8-40a3-ab93-ad4c0850aaa5",
+            "861d5d1a-05ae-437f-b8e5-c383c8f0c275",
             "7ed85866-c10d-4fc9-ad10-ddf5fdd0ab98"
         ],
         "parent": 1,
@@ -145,44 +149,10 @@
         "asset-pack": "core",
         "parent": "7ed85866-c10d-4fc9-ad10-ddf5fdd0ab98",
         "children": [
-            "05c0b8e0-8239-486d-a697-0b0138b46b17",
             "d8eb0020-6e26-4d92-bff5-e156f282fcb6",
+            "4cf4e1db-3bc9-47c1-ae97-290cb3651d19",
             "7126f077-b280-4ff5-8ef0-ac9e823bb91e"
         ]
-    },
-    "05c0b8e0-8239-486d-a697-0b0138b46b17": {
-        "id": "05c0b8e0-8239-486d-a697-0b0138b46b17",
-        "class": "ExecuteScript",
-        "name": "Set the equation to be solved",
-        "options": {
-            "exec": [
-                "() => {",
-                "  /*function readTextFile(file, array)",
-                "{",
-                "    var rawFile = new XMLHttpRequest();",
-                "    rawFile.open(\"GET\", file, false);",
-                "    rawFile.onreadystatechange = function ()",
-                "    {",
-                "        if(rawFile.readyState === 4)",
-                "        {",
-                "            if(rawFile.status === 200 || rawFile.status == 0)",
-                "            {",
-                "                var allText = rawFile.responseText;",
-                "                array = allText.split(\"\\n\");",
-                "              ",
-                "            }",
-                "        }",
-                "    }",
-                "    rawFile.send(null);",
-                "}",
-                "(readTextFile(\"./questions.txt\", array));",
-                "console.log(array);*/",
-                "  notepad.equation=\"5+7\";",
-                "}"
-            ]
-        },
-        "asset-pack": "core",
-        "parent": "1916f96d-cee8-4923-9740-90651b397b92"
     },
     "d8eb0020-6e26-4d92-bff5-e156f282fcb6": {
         "id": "d8eb0020-6e26-4d92-bff5-e156f282fcb6",
@@ -222,6 +192,7 @@
         ],
         "children": [
             "f551f397-b993-4428-bffa-1dc056746f51",
+            "507ddeac-3f0e-4043-9205-36c24db2528b",
             "7028d1e7-af03-4ae2-a114-eb03613ce15a",
             "6aa3fd4f-5bb0-4ba3-b954-a66c4d4bf93d",
             "e57c324d-da1e-482c-a96f-5c97f7789b5b",
@@ -256,8 +227,12 @@
             "getWords": [
                 "(callback) => {",
                 "     //callback(\"Good job!\");",
-                "    callback('What is ' + notepad.equation + '?');",
-                "}"
+                "     if (notepad.flag==notepad.questions.length){",
+                "       callback(\"Enough for one day. Go outside and play!\");",
+                "       exit(0);",
+                "     }",
+                "     else{",
+                "    callback('What is ' + notepad.questions[notepad.flag++] + '?');}}"
             ],
             "onWord": [
                 "(word) => {",
@@ -314,7 +289,7 @@
         "options": {
             "getTime": [
                 "() => {",
-                "    return 3000;",
+                "    return 4000;",
                 "}"
             ]
         },
@@ -344,7 +319,7 @@
         "class": "TextToSpeech",
         "name": "Wanna go again?",
         "options": {
-            "words": "Wrong Answer! Want to try again?",
+            "words": "Wrong Answer! Want to try again? Yes/No?",
             "onWord": [
                 "(word) => {",
                 "}"
@@ -378,8 +353,11 @@
                 "(listener) => {",
                 "    listener.on('cloud', function(asrResult, speakerIds) {",
                 "      if (asrResult.NLParse) {",
+                "        console.log(asrResult.NLParse);",
+                "        ",
                 "          notepad.play = (asrResult.NLParse.result=='yes')?true:false;",
                 "          notepad.loop = false;",
+                "          ",
                 "          console.log('notepad.loop: ',notepad.loop);",
                 "          console.log('notepad.play: ',notepad.play);",
                 "      } ",
@@ -465,39 +443,13 @@
     "1531a41e-4a06-4fb7-922b-c3d5c33c9e59": {
         "id": "1531a41e-4a06-4fb7-922b-c3d5c33c9e59",
         "class": "Case",
-        "name": "",
         "options": {
             "conditional": [
                 "() => {",
-                "var request = require('request');",
                 "",
-                "// Set the headers",
-                "var headers = {",
-                "    'User-Agent':       'Super Agent/0.0.1',",
-                "    'Content-Type':     'application/x-www-form-urlencoded'",
-                "}",
-                "",
-                "// Configure the request",
-                "var options = {",
-                "    url: 'http://api.wolframalpha.com/v2/query',",
-                "    method: 'GET',",
-                "    headers: headers,",
-                "    qs: {'input': '7+5', 'appid': '5VR6QQ-GRY4KUQA3Y', 'format' : 'plaintext'}",
-                "}",
-                "",
-                "// Start the request",
-                "request(options, function (error, response, body) {",
-                "    if (!error && response.statusCode == 200) {",
-                "        // Print out the response body",
-                "        console.log(\"my body : \",body)",
-                "        ",
-                "        //return true;",
-                "        return (12==notepad.result);",
-                "    }",
-                "})",
                 "  var wolf = \"12\";",
                 "  //return true;",
-                "  return (wolf==notepad.result);",
+                "  return (notepad.solution==notepad.result);",
                 " ",
                 "}"
             ]
@@ -512,7 +464,7 @@
             "conditional": [
                 "() => {",
                 "  var wolf = \"12\";",
-                "  return !(wolf==notepad.result);",
+                "  return !(notepad.solution==notepad.result);",
                 "}"
             ]
         },
@@ -535,5 +487,142 @@
         },
         "asset-pack": "core",
         "parent": "e57c324d-da1e-482c-a96f-5c97f7789b5b"
+    },
+    "4cf4e1db-3bc9-47c1-ae97-290cb3651d19": {
+        "id": "4cf4e1db-3bc9-47c1-ae97-290cb3651d19",
+        "class": "TimeoutJs",
+        "name": "",
+        "options": {
+            "getTime": [
+                "() => {",
+                "    return 1000;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "1916f96d-cee8-4923-9740-90651b397b92"
+    },
+    "8b51e7f4-97ff-4e70-a304-97f5b65b35af": {
+        "id": "8b51e7f4-97ff-4e70-a304-97f5b65b35af",
+        "class": "ExecuteScript",
+        "name": "Set the equation to be solved",
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.questions_=\"\"",
+                "  function readTextFile(file)",
+                "{",
+                "    var rawFile = new XMLHttpRequest();",
+                "    rawFile.open(\"GET\", file, false);",
+                "    rawFile.onreadystatechange = function ()",
+                "    {",
+                "        if(rawFile.readyState === 4)",
+                "        {",
+                "            if(rawFile.status === 200 || rawFile.status == 0)",
+                "            {",
+                "                var allText = rawFile.responseText;",
+                "                notepad.questions_=allText;",
+                "            }",
+                "        }",
+                "    }",
+                "    rawFile.send(null);",
+                "}",
+                "readTextFile(\"./questions.txt\");",
+                "notepad.questions=notepad.questions_.trim().split(\"\\n\");",
+                "notepad.flag=0;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 8
+    },
+    "583cd8ff-05e8-40a3-ab93-ad4c0850aaa5": {
+        "id": "583cd8ff-05e8-40a3-ab93-ad4c0850aaa5",
+        "class": "TimeoutJs",
+        "name": "",
+        "options": {
+            "getTime": [
+                "() => {",
+                "    return 3000;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 8
+    },
+    "1a30027a-49cf-4481-8281-1be5a0e18191": {
+        "id": "1a30027a-49cf-4481-8281-1be5a0e18191",
+        "class": "TextToSpeech",
+        "name": "",
+        "options": {
+            "words": "Preparing your questions!",
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 8
+    },
+    "861d5d1a-05ae-437f-b8e5-c383c8f0c275": {
+        "id": "861d5d1a-05ae-437f-b8e5-c383c8f0c275",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "    notepad.equation=notepad.questions[0];",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 8
+    },
+    "507ddeac-3f0e-4043-9205-36c24db2528b": {
+        "id": "507ddeac-3f0e-4043-9205-36c24db2528b",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "  ",
+                "  var request = require('request');",
+                "",
+                "  // Set the headers",
+                "  var headers = {",
+                "      'User-Agent':       'Super Agent/0.0.1',",
+                "      'Content-Type':     'application/x-www-form-urlencoded'",
+                "  }",
+                "notepad.solution=\"\"",
+                "",
+                "  // Configure the request",
+                "  var options = {",
+                "      url: 'http://api.wolframalpha.com/v2/query',",
+                "      method: 'GET',",
+                "      headers: headers,",
+                "      qs: {'input': notepad.questions[notepad.flag-1], 'appid': '5VR6QQ-GRY4KUQA3Y', 'format' : 'plaintext'}",
+                "  }",
+                "",
+                "  // Start the request",
+                "  request(options, function (error, response, body) {",
+                "      if (!error && response.statusCode == 200) {",
+                "          // Print out the response body",
+                "        //  console.log(\"my body : \",body)",
+                "          //console.log('----------------------------------');",
+                "          //console.log('----------------------------------');",
+                "          var  parser = new DOMParser();",
+                "          var xmlDoc = parser.parseFromString(body,\"text/xml\");",
+                "",
+                "        //  console.log(xmlDoc.getElementsByTagName(\"pod\")[1]);",
+                "          notepad.solution = xmlDoc.getElementsByTagName(\"pod\")[1].getElementsByTagName(\"plaintext\")[0].textContent;",
+                "          //console.log(part)",
+                "      }",
+                "  })",
+                "",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "7126f077-b280-4ff5-8ef0-ac9e823bb91e"
     }
 }
